@@ -1,0 +1,147 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2> Генератор упражнений</h2>
+<p>Твой уровень: <strong>{{ user.level }}</strong>, язык: <strong>{{ user.target_language }}</strong></p>
+
+<form method="POST" class="exercise-form">
+    <input type="text" name="topic" placeholder="Тема (например: еда, путешествия, работа)" value="{{ topic }}">
+    <button type="submit" class="btn btn-primary"> Сгенерировать 5 упражнений</button>
+</form>
+
+{% if exercises %}
+<div class="exercises-container">
+    <h3> Твои упражнения на тему «{{ topic }}»</h3>
+    {% for ex in exercises %}
+        <div class="exercise-card" data-type="{{ ex.type }}">
+            <div class="exercise-number">Упражнение {{ loop.index }}</div>
+            
+            {% if ex.type == 'translate' %}
+                <p class="exercise-question"> Переведи на {{ user.target_language }}: <strong>{{ ex.question }}</strong></p>
+                <details>
+                    <summary> Показать ответ</summary>
+                    <p class="exercise-answer">{{ ex.answer }}</p>
+                </details>
+            
+            {% elif ex.type == 'fill' %}
+                <p class="exercise-question"> Вставь пропущенное слово: <strong>{{ ex.question }}</strong></p>
+                <details>
+                    <summary> Показать ответ</summary>
+                    <p class="exercise-answer">Правильный ответ: {{ ex.answer }}</p>
+                </details>
+            
+            {% elif ex.type == 'choose' %}
+                <p class="exercise-question"> Выбери правильный вариант: <strong>{{ ex.question }}</strong></p>
+                <ul class="options">
+                    {% for opt in ex.options %}
+                        <li>{{ opt }}</li>
+                    {% endfor %}
+                </ul>
+                <details>
+                    <summary> Показать ответ</summary>
+                    <p class="exercise-answer">Правильный ответ: {{ ex.answer }}</p>
+                </details>
+            
+            {% else %}
+                <p class="exercise-question">{{ ex.question }}</p>
+            {% endif %}
+        
+        </div>
+        
+    {% endfor %}
+</div>
+{% endif %}
+
+
+<style>
+.exercise-form {
+    background: white;
+    padding: 20px;
+    border-radius: 16px;
+    margin-bottom: 30px;
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.exercise-form input {
+    flex: 2;
+    min-width: 200px;
+}
+
+.exercise-form button {
+    flex: 1;
+    min-width: 200px;
+}
+
+.exercises-container {
+    margin-top: 20px;
+}
+
+.exercise-card {
+    background: white;
+    border-radius: 16px;
+    padding: 20px;
+    margin-bottom: 16px;
+    border-left: 4px solid #3b82f6;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.exercise-number {
+    font-size: 0.8rem;
+    color: #3b82f6;
+    font-weight: bold;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+}
+
+.exercise-question {
+    font-size: 1.1rem;
+    margin: 10px 0;
+}
+
+.options {
+    margin: 10px 0;
+    padding-left: 20px;
+}
+
+.options li {
+    margin: 5px 0;
+}
+
+details {
+    margin-top: 12px;
+    cursor: pointer;
+}
+
+.exercise-answer {
+    background: #e0f2fe;
+    padding: 8px 12px;
+    border-radius: 12px;
+    margin-top: 8px;
+    display: inline-block;
+}
+
+summary {
+    color: #3b82f6;
+    font-weight: 500;
+}
+</style>
+
+<!-- Индикатор загрузки -->
+<div class="loading-overlay" id="loadingOverlay">
+    <div>
+        <div class="loading-spinner"></div>
+        <div class="loading-text"> ИИ генерирует ответ...</div>
+    </div>
+</div>
+
+<script>
+    document.querySelectorAll('form').forEach(form => {
+        form.addEventListener('submit', function() {
+            document.getElementById('loadingOverlay').classList.add('active');
+        });
+    });
+</script>
+
+{% endblock %}

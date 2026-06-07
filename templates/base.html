@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='favicon.png') }}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>LinguaAI - Изучай языки с ИИ</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <nav>
+        <div class="container">
+            <a href="/" class="logo">📚 LinguaAI</a>
+            
+            <!-- Кнопка-бургер (только на мобильных) -->
+            <button class="burger" id="burgerBtn">☰</button>
+            
+            <!-- Меню (на ПК - горизонтальное, на мобильных - скрытое до клика) -->
+            {% if request.endpoint not in ['login', 'register'] %}
+            <div class="nav-links" id="navLinks">
+                <a href="/">Главная</a>
+                <a href="/dictionary">Словарь</a>
+                <a href="/chat">Тренажёр</a>
+                <a href="/assessment">Оценка уровня</a>
+                <a href="/profile">Профиль</a>
+                <a href="/logout">Выйти</a>
+            </div>
+            {% endif %}
+        </div>
+    </nav>
+
+    <main class="container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>LinguaAI — дипломный проект. ИИ-репетитор на основе нейросетевого API</p>
+        </div>
+    </footer>
+
+    <script>
+        const burger = document.getElementById('burgerBtn');
+        const navLinks = document.getElementById('navLinks');
+        
+        if (burger) {
+            burger.addEventListener('click', function() {
+                navLinks.classList.toggle('active');
+            });
+        }
+    </script>
+</body>
+</html>

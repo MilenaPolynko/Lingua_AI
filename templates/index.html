@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="hero">
+    <h1>Добро пожаловать в LinguaAI 🎓</h1>
+    <p>Изучай языки с помощью искусственного интеллекта, который подстраивается под твой уровень</p>
+    
+    {% if not current_user.is_authenticated %}
+        <div class="buttons">
+            <a href="/register" class="btn btn-primary">Начать учиться</a>
+            <a href="/login" class="btn btn-secondary">У меня уже есть аккаунт</a>
+        </div>
+    {% else %}
+        <div class="buttons">
+            <a href="/dictionary" class="btn btn-primary">Словарь с ИИ</a>
+            <a href="/profile" class="btn btn-secondary">Настроить профиль</a>
+        </div>
+    {% endif %}
+</div>
+
+<div class="features-preview">
+    <div class="feature-item">
+        <span>📓</span>
+        <h3>Толковый словарь</h3>
+        <p>ИИ объяснит любое слово просто и понятно</p>
+    </div>
+    <div class="feature-item">
+        <span>💬</span>
+        <h3>Диалоговый тренажёр</h3>
+        <p>Общайся с ИИ на изучаемом языке</p>
+    </div>
+    <div class="feature-item">
+        <span>✍🏻</span>
+        <h3>Оценка уровня</h3>
+        <p>Узнай свой реальный уровень владения</p>
+    </div>
+</div>
+{% endblock %}

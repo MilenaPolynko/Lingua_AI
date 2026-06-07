@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Профиль: {{ user.username }}</h2>
+
+<form method="POST">
+    <div class="form-group">
+        <label>Какой язык учим?</label>
+        <select name="target_language" class="form-control">
+            {% for code, name in languages.items() %}
+                <option value="{{ code }}" {% if user.target_language == code %}selected{% endif %}>
+                    {{ name }}
+                </option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label>Твой уровень (A1 - начинающий, C1 - продвинутый)</label>
+        <select name="level" class="form-control">
+            {% for lvl in levels %}
+                <option value="{{ lvl }}" {% if user.level == lvl %}selected{% endif %}>
+                    {{ lvl }}
+                </option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Сохранить настройки</button>
+</form>
+
+<div class="info">
+    <h3>Текущие настройки</h3>
+    <p>Язык: <strong>{{ user.target_language }}</strong></p>
+    <p>Уровень: <strong>{{ user.level }}</strong></p>
+    <p>ИИ будет подстраиваться под эти параметры при объяснении слов и в диалогах</p>
+</div>
+{% endblock %}

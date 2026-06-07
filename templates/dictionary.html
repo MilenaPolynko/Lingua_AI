@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2> Толковый словарь с ИИ</h2>
+<p>Твой уровень: <strong>{{ user.level }}</strong>, изучаемый язык: <strong>{{ user.target_language }}</strong></p>
+
+<form method="POST">
+    <input type="text" name="word" placeholder="Введите слово на {{ user.target_language }}" required value="{{ word or '' }}">
+    <button type="submit" class="btn btn-primary">Объяснить</button>
+</form>
+
+{% if ai_response %}
+<div class="ai-answer">
+    <h3> ИИ-репетитор говорит:</h3>
+    <div class="answer-content">
+        {{ ai_response | replace('\n', '<br>') | safe }}
+    </div>
+</div>
+{% endif %}
+<div class="loading-overlay" id="loadingOverlay">
+    <div>
+        <div class="loading-spinner"></div>
+        <div class="loading-text"> ИИ думает над ответом...</div>
+    </div>
+</div>
+
+<script>
+    const chatForm = document.querySelector('.chat-form');
+    const loadingOverlay = document.getElementById('loadingOverlay');
+    
+    if (chatForm) {
+        chatForm.addEventListener('submit', function() {
+            loadingOverlay.classList.add('active');
+        });
+    }
+
+</script>
+{% endblock %}
